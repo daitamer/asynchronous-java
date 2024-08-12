@@ -8,18 +8,36 @@ public class Main {
     public static void main(String[] args) {
 
 
-       CompletableFuture<Void> hello = CompletableFuture.runAsync(() ->{
+       CompletableFuture<String> hello = CompletableFuture.supplyAsync(() ->{
          {
                try {
-                   Thread.sleep(2000);
-                   System.out.println("complete");
+                   Thread.sleep(3000);
                } catch (InterruptedException e) {
                    e.printStackTrace();
                }
+
+             return "Hello";
            }
-       }) ;
-       hello.join();
-       }
+       });
+
+        CompletableFuture<String> world = CompletableFuture.supplyAsync(() ->{
+            {
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                return "World";
+            }
+        }) ;
+
+        CompletableFuture<String> future = hello.thenCombine(world, (expression1, expression2) -> expression1 + " " + expression2);
+        System.out.println(future.join());
+
+
+
+       } // end public static void main(String[] args)
 
     }
 
